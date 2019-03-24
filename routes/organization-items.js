@@ -6,12 +6,12 @@ var upload = multer()
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', {session: false, failWithError: true})
 
-const Pro = require('../models/pro');
+const Organization = require('../models/organization');
 
 const router = express.Router()
 
 router.get('/', (req, res, next) => {
-    Pro.find()
+    Organization.find()
         .sort({title: 'asc'})
         .then(results => {
             res.json(results)
@@ -26,7 +26,7 @@ router.get('/search', (req, res, next) => {
     const term = req.query.term ? req.query.term : "";
     const filter = req.query.filter === 'All' ? "" : req.query.filter.slice(0, -1)
   
-    Pro.find({ "title": { "$regex": `${term}`, "$options": "i" }, "type": { "$regex": `${filter}`, "$options": "i" }})
+    Organization.find({ "title": { "$regex": `${term}`, "$options": "i" }, "type": { "$regex": `${filter}`, "$options": "i" }})
       .sort({ title: 'asc' })
       .then(results => {
           // console.log(results)
@@ -39,7 +39,7 @@ router.get('/search', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
     const { id } = req.params
-    Pro.findById(id)
+    Organization.findById(id)
         .then(results => {
             res.json(results)
         })
@@ -69,9 +69,9 @@ router.post('/', jwtAuth, (req, res, next) => {
         return next(err)
     }
 
-    const newPro = { title, type, quote, quoteReference, quoteLink, description, imgUrl}
+    const newOrganization = { title, type, quote, quoteReference, quoteLink, description, imgUrl}
 
-    Pro.create(newPro)
+    Organization.create(newOrganization)
         .then(result => {
             res
                 .status(201)
@@ -105,9 +105,9 @@ router.put('/:id', jwtAuth, (req, res, next) => {
         return next(err)
     }
 
-    const updatePro = { title, type, quote, quoteReference, quoteLink, description, imgUrl }
+    const updateOrganization = { title, type, quote, quoteReference, quoteLink, description, imgUrl }
 
-    Pro.findByIdAndUpdate(id, updatePro, {new: true})
+    Organization.findByIdAndUpdate(id, updateOrganization, {new: true})
         .then(result => {
             if (result) {
                 res.json(result)
@@ -130,7 +130,7 @@ router.delete('/:id', jwtAuth, (req, res, next) => {
         return next(err)
     }
 
-    Pro.findByIdAndRemove(id)
+    Organization.findByIdAndRemove(id)
         .then(() => {
             res.sendStatus(204)
         })

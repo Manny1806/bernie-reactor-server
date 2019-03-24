@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const proSchema = new mongoose.Schema({
+const organizationSchema = new mongoose.Schema({
     title: {type: String, required: true},
     quote: {type: String, required: true},
     type: {type: String, required: true},
@@ -10,8 +10,8 @@ const proSchema = new mongoose.Schema({
     imgUrl: String
 })
 
-proSchema.set('timestamps', true)
-proSchema.set('toObject', {
+organizationSchema.set('timestamps', true)
+organizationSchema.set('toObject', {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
@@ -19,4 +19,4 @@ proSchema.set('toObject', {
     }
 })
 
-module.exports = mongoose.model('Pro', proSchema)
+module.exports = mongoose.model('Organization', organizationSchema)
